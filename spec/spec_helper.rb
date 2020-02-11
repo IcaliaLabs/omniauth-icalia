@@ -1,9 +1,9 @@
-require "bundler/setup"
-require "omniauth/icalia"
+require 'bundler/setup'
+require 'omniauth-icalia'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
-  config.example_status_persistence_file_path = ".rspec_status"
+  config.example_status_persistence_file_path = 'examples.txt'
 
   # Disable RSpec exposing methods globally on `Module` and `main`
   config.disable_monkey_patching!
