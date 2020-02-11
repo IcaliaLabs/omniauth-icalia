@@ -1,0 +1,17 @@
+# Ignore history files:
+**/.*_hist*
+pry_history
+
+# Ignore builds:
+**/icalia-sdk*.gem
+
+**/.gem
+
+# Ignore rspec state
+**/.rspec_status
+
+# Ignore dotenv files:
+**/*.env
+!**/*example.env
+
+.bundle
