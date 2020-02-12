@@ -9,6 +9,7 @@ pry_history
 
 # Ignore rspec state
 **/.rspec_status
+examples.txt
 
 # Ignore dotenv files:
 **/*.env

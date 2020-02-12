@@ -38,6 +38,8 @@ coverage/*
 .reek
 .scss-lint.yml
 
+examples.txt
+
 **/.gem
 /.semaphore
 /tmp
