@@ -42,7 +42,7 @@ def sorted_cache_images
 
   # 1: Testing of commit:
   sorted_images << unsorted_images.detect do |image|
-    image == "#{image_repo}:testing-#{ENV['GIT_SHORT_SHA']}"
+    image == "#{image_repo}:testing-#{ENV['GIT_COMMIT_SHORT_SHA']}"
   end
 
   # 2: Builder of branch:
@@ -88,7 +88,7 @@ end
 
 def tag_and_push_branch
   branch_image = main_image
-    .gsub(ENV['GIT_SHORT_SHA'], ENV['TAG_SAFE_BRANCH'])
+    .gsub(ENV['GIT_COMMIT_SHORT_SHA'], ENV['TAG_SAFE_BRANCH'])
 
   branch_image = branch_image[0..-8] if branch_image =~ /:(\w+)-master\z/
 
@@ -100,7 +100,7 @@ def tag_and_push_latest
   # We'll only tag 'testing', 'builder' or 'latest' if we're on master:
   return unless ENV['TAG_SAFE_BRANCH'] == 'master'
 
-  latest_image = main_image.gsub(ENV['GIT_SHORT_SHA'], '')
+  latest_image = main_image.gsub(ENV['GIT_COMMIT_SHORT_SHA'], '')
 
   if latest_image.end_with?('-')
     # It's either a 'builder' or 'testing' tag:
