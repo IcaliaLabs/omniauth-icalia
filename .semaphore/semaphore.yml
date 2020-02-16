@@ -1,106 +1,55 @@
 version: v1.0
 
-name: 'Main Pipeline'
+name: 'Test & Build'
 
 agent:
   machine:
     type: e1-standard-2
     os_image: ubuntu1804
 
+auto_cancel:
+  running:
+    when: "branch != 'master'"
+
+global_job_config:
+  secrets:
+    - name: icalia-labs-semaphore-registry
+  prologue:
+    commands:
+      # Checkout the code:
+      - checkout
+
+      # Add the scripts for CI to the PATH:
+      - export PATH=$(pwd)/.semaphore/bin:${PATH}
+
+      # Generate the dotenv file:
+      - generate-dotenv-file > .env
+
+      # Alias docker-compose commands as 'ci-compose':
+      - alias ci-compose="docker-compose --file docker-compose.yml --file ci-compose.yml"
+
+      # Log in to Semaphore CI Docker Registry:
+      - docker login -u "$SEMAPHORE_REGISTRY_USERNAME" -p "$SEMAPHORE_REGISTRY_PASSWORD" https://icalia-labs.registry-beta.semaphoreci.com
+
 blocks:
-  - name: Build Test Image
+  - name: Run Tests
     task:
-      secrets:
-        - name: AWS
-      prologue:
-        commands:
-          - checkout
-
-          # Add the scripts for CI to the PATH:
-          - export PATH=$(pwd)/.semaphore/bin:${PATH}
-
-          # Generate the dotenv file:
-          - generate-dotenv-file > .env
-
-          # Alias docker-compose commands as 'ci-compose':
-          - alias ci-compose="docker-compose --file docker-compose.yml --file ci-compose.yml"
-
-          # Log in to AWS ECR:
-          - $(aws ecr get-login --no-include-email --region eu-central-1)
       jobs:
-        - name: Build
+        - name: Testing
           commands:
             # Pull the images referenced in the 'cache_from' key:
-            - docker-image-manager download-cache libraries
+            - docker-image-manager download-cache test
 
             # Build the test image:
-            - ci-compose build --pull libraries
+            - ci-compose build --pull test
 
             # Tag & Push test image so we can use it on image cache:
-            - docker-image-manager tag-and-push libraries
-  
-  - name: SDK Tests
-    task:
-      secrets:
-        - name: AWS
-      prologue:
-        commands:
-          - checkout
-
-          # Add the scripts for CI to the PATH:
-          - export PATH=$(pwd)/.semaphore/bin:${PATH}
-
-          # Generate the dotenv file:
-          - generate-dotenv-file > .env
-
-          # Alias docker-compose commands as 'ci-compose':
-          - alias ci-compose="docker-compose --file docker-compose.yml --file ci-compose.yml"
-
-          # Log in to AWS ECR:
-          - $(aws ecr get-login --no-include-email --region eu-central-1)
-          
-          # Pull the images referenced in the 'cache_from' key:
-          - docker-image-manager download-cache libraries
-      jobs:
-        - name: Event Core
-          commands:
-            # Run the tests
-            - ci-compose run event_core rake spec
+            - docker-image-manager tag-and-push test
+            
+            - ci-compose run test rake spec
             
             # Build the gem
-            - ci-compose run event_core gem build icalia-sdk-event-core
-        
-        - name: Event Notification
-          commands:
-            # Run the tests
-            - ci-compose run event_notification rake spec
-            
-            # Build the gem
-            - ci-compose run event_notification gem build icalia-sdk-event-notification
-        
-        - name: Event Webhook
-          commands:
-            # Run the tests
-            - ci-compose run event_webhook rake spec
-            
-            # Build the gem
-            - ci-compose run event_webhook gem build icalia-sdk-event-webhook
-        
-        - name: Event Meta
-          commands:
-            # Run the tests
-            - ci-compose run event_meta rake spec
-            
-            # Build the gem
-            - ci-compose run event_meta gem build icalia-sdk-event
-        
-        - name: SDK Meta
-          commands:
-            # Run the tests
-            - ci-compose run sdk_meta rake spec
-            
-            # Build the gem
-            - ci-compose run sdk_meta gem build icalia-sdk
+            - ci-compose run test gem build omniauth-icalia
 
 promotions:
   - name: Publish
