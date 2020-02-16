@@ -29,7 +29,15 @@ module OmniAuth
       uid { raw_info.resource_owner.id.to_s }
 
       info do
-        { 'name' => raw_info.resource_owner.name }
+        personal_info = raw_info.resource_owner
+        {
+          'full_name' => personal_info.full_name,
+          'given_name' => personal_info.given_name,
+          'family_name' => personal_info.family_name,
+          'gender_type' => personal_info.gender_type,
+          'custom_gender' => personal_info.custom_gender,
+          'date_of_birth' => personal_info.date_of_birth
+        }
       end
 
       extra do
