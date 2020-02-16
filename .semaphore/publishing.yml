@@ -34,10 +34,10 @@ global_job_config:
       - docker-image-manager download-cache test
 
 blocks:
-  - name: Publish to Rubygems
+  - name: Publish omniauth-icalia
     task:
       jobs:
-        - name: Publish omniauth-gem
+        - name: Publish to Rubygems
           commands:
             # Build & publish the gem
             - ci-compose run release
