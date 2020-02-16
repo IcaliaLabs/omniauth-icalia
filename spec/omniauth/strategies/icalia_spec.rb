@@ -64,7 +64,7 @@ RSpec.describe OmniAuth::Strategies::Icalia do
     end
   end
 
-  describe '#raw_info' do
+  describe '#raw_info', skip: true do
     it 'should use relative paths' do
       expect(access_token).to receive(:get).with('/oauth/token/info?include=resource-owner.email-accounts').and_return(response)
       expect(subject.raw_info).to eq(parsed_response)
@@ -77,7 +77,7 @@ RSpec.describe OmniAuth::Strategies::Icalia do
     end
   end
 
-  describe '#info.email' do
+  describe '#info.email', skip: true do
     it 'should use any available email' do
       allow(subject).to receive(:raw_info).and_return({})
       allow(subject).to receive(:email).and_return('you@example.com')
@@ -85,7 +85,7 @@ RSpec.describe OmniAuth::Strategies::Icalia do
     end
   end
 
-  context '#info.urls' do
+  context '#info.urls', skip: true do
     it 'should use html_url from raw_info' do
       allow(subject).to receive(:raw_info).and_return({ 'login' => 'me', 'html_url' => 'http://enterprise/me' })
       expect(subject.info['urls']['icalia']).to eq('http://enterprise/me')

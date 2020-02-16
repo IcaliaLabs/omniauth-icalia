@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    omniauth-icalia (0.1.0)
+    omniauth-icalia (0.1.1)
       icalia-sdk-event-core (~> 0.3.4, >= 0.3.4)
       omniauth (~> 1.5)
       omniauth-oauth2 (>= 1.4.0, < 2.0)
