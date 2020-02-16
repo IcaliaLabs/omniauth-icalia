@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.license       = 'MIT'
   
   spec.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
-  spec.files         = `git ls-files`.split("\n")
+  spec.files         = `git ls-files -- lib/* *.md *.gemspec *.txt Rakefile`.split("\n")
   spec.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   spec.name          = 'omniauth-icalia'
   spec.require_paths = ['lib']
