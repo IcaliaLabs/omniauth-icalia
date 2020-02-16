@@ -17,4 +17,6 @@ services:
         - icalia-labs.registry-beta.semaphoreci.com/icalialabs/omniauth-icalia:testing-${TAG_SAFE_BRANCH}
         - icalia-labs.registry-beta.semaphoreci.com/icalialabs/omniauth-icalia:testing
     volumes:
+      - .git:/usr/src/.git
+      - .gitignore:/usr/src/.gitignore
       - ${HOME}/.gem/credentials:/root/.gem/credentials
