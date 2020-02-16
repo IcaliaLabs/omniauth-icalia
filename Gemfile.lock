@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     omniauth-icalia (0.1.1)
-      icalia-sdk-event-core (~> 0.3.4, >= 0.3.4)
+      icalia-sdk-event-core (~> 0.3, >= 0.3.5)
       omniauth (~> 1.5)
       omniauth-oauth2 (>= 1.4.0, < 2.0)
 
@@ -26,7 +26,7 @@ GEM
     hashie (3.6.0)
     i18n (1.8.2)
       concurrent-ruby (~> 1.0)
-    icalia-sdk-event-core (0.3.4)
+    icalia-sdk-event-core (0.3.5)
       activemodel (>= 5.0)
       jsonapi-deserializable (~> 0.2.0)
     jsonapi-deserializable (0.2.0)
