@@ -43,3 +43,6 @@ examples.txt
 **/.gem
 /.semaphore
 /tmp
+
+# Ignore packed gems:
+omniauth-icalia-*.gem

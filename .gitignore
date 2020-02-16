@@ -16,3 +16,6 @@ examples.txt
 !**/*example.env
 
 .bundle
+
+# Ignore packed gems:
+omniauth-icalia-*.gem
