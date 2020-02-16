@@ -3,7 +3,7 @@
 version: '3.7'
 
 services:
-  test:
+  test: &lib
     image: icalia-labs.registry-beta.semaphoreci.com/icalialabs/omniauth-icalia:testing-${GIT_COMMIT_SHORT_SHA:-latest}
     build:
       target: testing
@@ -16,7 +16,10 @@ services:
         - icalia-labs.registry-beta.semaphoreci.com/icalialabs/omniauth-icalia:testing-${GIT_COMMIT_SHORT_SHA:-latest}
         - icalia-labs.registry-beta.semaphoreci.com/icalialabs/omniauth-icalia:testing-${TAG_SAFE_BRANCH}
         - icalia-labs.registry-beta.semaphoreci.com/icalialabs/omniauth-icalia:testing
+  
+  release:
+    <<: *lib
+    command: rake release
     volumes:
-      - .git:/usr/src/.git
-      - .gitignore:/usr/src/.gitignore
+      - .:/usr/src
       - ${HOME}/.gem/credentials:/root/.gem/credentials

@@ -40,4 +40,4 @@ blocks:
         - name: Publish omniauth-gem
           commands:
             # Build & publish the gem
-            - ci-compose run test rake release
+            - ci-compose run release
