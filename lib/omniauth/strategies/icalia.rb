@@ -12,6 +12,18 @@ module OmniAuth
         authorize_url: 'https://artanis.icalialabs.com/oauth/authorize'
       }
 
+      @@instances = []
+
+      def self.instances
+        class_variable_get('@@instances')
+      end
+
+      def initialize(*args)
+        instance = super(*args)
+        @@instances << instance
+        instance
+      end
+
       def request_phase
         super
       end

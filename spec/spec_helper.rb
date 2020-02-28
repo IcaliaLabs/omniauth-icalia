@@ -1,5 +1,8 @@
 require 'bundler/setup'
+require 'capybara'
 require 'omniauth-icalia'
+
+Capybara.server = :webrick
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
