@@ -86,7 +86,7 @@ module Icalia
 
     %i[oauth_flows store_oauth_flow_data example_resource_owner_id
       example_resource_owner_given_name example_resource_owner_family_name
-      example_resource_owner_gender_type
+      example_resource_owner_gender_type example_resource_owner_full_name
       example_resource_owner_custom_gender].each do |method_name|
         define_method method_name do |*args|
           self.class.public_send method_name, *args
