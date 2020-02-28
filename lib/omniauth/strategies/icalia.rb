@@ -6,11 +6,20 @@ module OmniAuth
     class Icalia < OmniAuth::Strategies::OAuth2
       INFO_PATH = '/oauth/token/info?include=resource-owner.email-accounts'
 
+      @@instances = []
+
       option :client_options, {
         site: 'https://artanis.icalialabs.com',
         token_url: 'https://artanis.icalialabs.com/oauth/token',
         authorize_url: 'https://artanis.icalialabs.com/oauth/authorize'
       }
+
+      def initialize(*args)
+        instance = super(*args)
+        debugger
+        @@instances << instance
+        instance
+      end
 
       def request_phase
         super
