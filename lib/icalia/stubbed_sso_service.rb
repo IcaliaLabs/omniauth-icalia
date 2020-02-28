@@ -118,7 +118,7 @@ module Icalia
       end
     
       # Taken from FakeStripe.stub_stripe at fake_stripe gem: 
-      def configure
+      def prepare
         reset
     
         yield self if block_given?
