@@ -95,8 +95,7 @@ module Icalia
 
     class << self
       def oauth_flows
-        class_variable_get('@@oauth_flows') ||
-        class_variable_set('@@oauth_flows', [])
+        @oauth_flows ||= []
       end
 
       def reset
