@@ -24,6 +24,33 @@ Or install it yourself as:
 
 TODO: Write usage instructions here
 
+## System Testing on your app
+
+You can use the included service stub in your system tests.
+
+On your spec_helper, or test setup file:
+
+```ruby
+require 'omniauth-icalia/service_stubs'
+```
+
+Then, in your test setup, call `prepare`:
+
+```ruby
+# For example, in RSpec:
+before { Icalia::StubbedSSOService.prepare }
+
+# Use a block if you need to set the data returned by the service:
+before do 
+  Icalia::StubbedSSOService.prepare do |config|
+    # Optionally add example data about the expected token owner:
+    config.example_resource_owner_id = SecureRandom.uuid
+    config.example_resource_owner_given_name = 'George'
+    config.example_resource_owner_family_name = 'Harrison'
+  end
+end
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
