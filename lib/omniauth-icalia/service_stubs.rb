@@ -1,0 +1,1 @@
+require 'icalia/stubbed_sso_service'
