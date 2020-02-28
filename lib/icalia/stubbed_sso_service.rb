@@ -128,11 +128,12 @@ module Icalia
         boot_once
     
         oauth_host = "http://localhost:#{server_port}"
-    
-        Devise.omniauth_configs[:icalia].strategy.client_options.tap do |options|
-          options.site = oauth_host
-          options.token_url = "#{oauth_host}/oauth/token"
-          options.authorize_url = "#{oauth_host}/oauth/authorize"
+
+        OmniAuth::Strategies::Icalia.instances.each do |options|
+          client_options = options.client_options
+          client_options.site = oauth_host
+          client_options.token_url = "#{oauth_host}/oauth/token"
+          client_options.authorize_url = "#{oauth_host}/oauth/authorize"
         end
       end
 
