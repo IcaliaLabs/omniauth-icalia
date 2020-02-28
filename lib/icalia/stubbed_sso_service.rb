@@ -137,6 +137,19 @@ module Icalia
         end
       end
 
+      def teardown
+        default_client_options = OmniAuth::Strategies::Icalia
+          .default_options
+          .client_options
+
+        OmniAuth::Strategies::Icalia.instances.each do |options|
+          client_options = options.client_options
+          client_options.site = default_client_options.site
+          client_options.token_url = default_client_options.token_url
+          client_options.authorize_url = default_client_options.authorize_url
+        end
+      end
+
       # Taken from FakeStripe::Utils at fake_stripe gem: =======================
       def find_available_port
         server = TCPServer.new(FIND_AVAILABLE_PORT)
