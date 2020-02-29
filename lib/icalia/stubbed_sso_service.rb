@@ -10,6 +10,8 @@ module Icalia
     FIND_AVAILABLE_PORT = 0
     CODE = 'icalia_oauth_authorization_code'.freeze
 
+    @@sign_in_user_on_authorize = false
+
     post '/oauth/token' do
       if params[:code] == CODE
         response.headers['Content-Type'] = 'application/json'
@@ -30,7 +32,18 @@ module Icalia
       end
     end
 
+    get '/sign-in' do
+      'Signed out successfully.'
+    end
+
+    get '/sign-out' do
+      uri = URI(params[:redirect_uri])
+      redirect uri
+    end
+
     get '/oauth/authorize' do
+      return redirect '/sign-in' unless @@sign_in_user_on_authorize
+
       store_oauth_flow_data params
       uri = URI(params[:redirect_uri])
       uri.query = URI.encode_www_form(state: params[:state], code: CODE)
@@ -116,37 +129,53 @@ module Icalia
       def store_oauth_flow_data(data)
         oauth_flows << data
       end
+
+      def url
+        "http://localhost:#{server_port}"
+      end
+
+      def sign_in_url
+        "#{url}/sign-in"
+      end
     
       # Taken from FakeStripe.stub_stripe at fake_stripe gem: 
       def prepare
         reset
-    
+
         yield self if block_given?
-    
+
         # Since the OAuth flow is performed by the browser, we'll need to boot
         # the Sinatra app instead of just stubbing the app with WebMock...
         boot_once
-    
-        oauth_host = "http://localhost:#{server_port}"
 
-        OmniAuth::Strategies::Icalia.instances.each do |options|
-          client_options = options.client_options
-          client_options.site = oauth_host
-          client_options.token_url = "#{oauth_host}/oauth/token"
-          client_options.authorize_url = "#{oauth_host}/oauth/authorize"
+        OmniAuth::Strategies::Icalia.instances.each do |strategy|
+          strategy.options.client_options.tap do |options|
+            options.site = url
+            options.token_url = "#{oauth_host}/oauth/token"
+            options.authorize_url = "#{oauth_host}/oauth/authorize"
+          end
         end
+      end
+
+      def sign_in_on_authorize
+        @@sign_in_user_on_authorize = true
+      end
+
+      def do_not_sign_in_on_authorize
+        @@sign_in_user_on_authorize = false
       end
 
       def teardown
         default_client_options = OmniAuth::Strategies::Icalia
           .default_options
           .client_options
-
-        OmniAuth::Strategies::Icalia.instances.each do |options|
-          client_options = options.client_options
-          client_options.site = default_client_options.site
-          client_options.token_url = default_client_options.token_url
-          client_options.authorize_url = default_client_options.authorize_url
+  
+        OmniAuth::Strategies::Icalia.instances.each do |strategy|
+          strategy.options.client_options.tap do |options|
+            options.site = default_client_options.site
+            options.token_url = default_client_options.token_url
+            options.authorize_url = default_client_options.authorize_url
+          end
         end
       end
 
