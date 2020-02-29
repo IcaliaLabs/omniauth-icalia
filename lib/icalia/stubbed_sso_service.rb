@@ -91,7 +91,7 @@ module Icalia
         define_singleton_method method_name do
           class_variable_get("@@#{method_name}")
         end
-        
+
         define_singleton_method "#{method_name}=".to_sym do |value|
           class_variable_set("@@#{method_name}", value)
         end
@@ -113,19 +113,19 @@ module Icalia
 
       def reset
         oauth_flows.clear
-    
+
         self.example_resource_owner_id = SecureRandom.uuid
         self.example_resource_owner_given_name = 'Example Person'
         self.example_resource_owner_family_name = 'From Artanis'
         self.example_resource_owner_gender_type = 'male'
         self.example_resource_owner_custom_gender = nil
       end
-    
+
       def example_resource_owner_full_name
         [example_resource_owner_given_name, example_resource_owner_family_name]
           .compact.join(' ').strip
       end
-    
+
       def store_oauth_flow_data(data)
         oauth_flows << data
       end
@@ -137,8 +137,8 @@ module Icalia
       def sign_in_url
         "#{url}/sign-in"
       end
-    
-      # Taken from FakeStripe.stub_stripe at fake_stripe gem: 
+
+      # Taken from FakeStripe.stub_stripe at fake_stripe gem:
       def prepare
         reset
 
