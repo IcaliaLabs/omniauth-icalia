@@ -51,6 +51,35 @@ before do
 end
 ```
 
+If your'e testing a sign-in flow:
+
+```ruby
+scenario 'sign-in' do
+  # Simulate that the user will sign-in at the SSO site:
+  Icalia::StubbedSSOService.sign_in_on_authorize
+  visit root_path # or any path in your app that requires authentication
+
+  #...
+end
+```
+
+If your'e testing a sign-out flow:
+
+```ruby
+scenario 'sign-out' do
+  # Simulate that the user will sign-in at the SSO site:
+  Icalia::StubbedSSOService.sign_in_on_authorize
+  visit root_path # or any path in your app that requires authentication
+
+  # Simulate that the user won't sign-in at the SSO site:
+  Icalia::StubbedSSOService.do_not_sign_in_on_authorize
+  click_link 'Logout'
+
+  # The message coming from Artanis & the Fake Artanis "StubbedSSOService":
+  expect(page).to have_content 'Signed out successfully.'
+end
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
