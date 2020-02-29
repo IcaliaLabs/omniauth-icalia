@@ -128,10 +128,11 @@ module Icalia
         oauth_host = "http://localhost:#{server_port}"
 
         OmniAuth::Strategies::Icalia.instances.each do |options|
-          client_options = options.client_options
-          client_options.site = oauth_host
-          client_options.token_url = "#{oauth_host}/oauth/token"
-          client_options.authorize_url = "#{oauth_host}/oauth/authorize"
+          options.client_options.tap do |client_options|
+            client_options.site = oauth_host
+            client_options.token_url = "#{oauth_host}/oauth/token"
+            client_options.authorize_url = "#{oauth_host}/oauth/authorize"
+          end
         end
     
         yield self if block_given?
@@ -143,10 +144,11 @@ module Icalia
           .client_options
 
         OmniAuth::Strategies::Icalia.instances.each do |options|
-          client_options = options.client_options
-          client_options.site = default_client_options.site
-          client_options.token_url = default_client_options.token_url
-          client_options.authorize_url = default_client_options.authorize_url
+          options.client_options.tap do |client_options|
+            client_options.site = default_client_options.site
+            client_options.token_url = default_client_options.token_url
+            client_options.authorize_url = default_client_options.authorize_url
+          end
         end
       end
 
