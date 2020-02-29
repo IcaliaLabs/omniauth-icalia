@@ -10,6 +10,8 @@ module Icalia
     FIND_AVAILABLE_PORT = 0
     CODE = 'icalia_oauth_authorization_code'.freeze
 
+    @@sign_in_user_on_authorize = false
+
     post '/oauth/token' do
       if params[:code] == CODE
         response.headers['Content-Type'] = 'application/json'
@@ -30,7 +32,18 @@ module Icalia
       end
     end
 
+    get '/sign-in' do
+      'Signed out successfully.'
+    end
+
+    get '/sign-out' do
+      uri = URI(params[:redirect_uri])
+      redirect uri
+    end
+
     get '/oauth/authorize' do
+      return redirect '/sign-in' unless @@sign_in_user_on_authorize
+
       store_oauth_flow_data params
       uri = URI(params[:redirect_uri])
       uri.query = URI.encode_www_form(state: params[:state], code: CODE)
@@ -120,6 +133,10 @@ module Icalia
       def url
         "http://localhost:#{server_port}"
       end
+
+      def sign_in_url
+        "#{url}/sign-in"
+      end
     
       # Taken from FakeStripe.stub_stripe at fake_stripe gem: 
       def prepare
@@ -138,6 +155,14 @@ module Icalia
             options.authorize_url = "#{oauth_host}/oauth/authorize"
           end
         end
+      end
+
+      def sign_in_on_authorize
+        @@sign_in_user_on_authorize = true
+      end
+
+      def do_not_sign_in_on_authorize
+        @@sign_in_user_on_authorize = false
       end
 
       def teardown
