@@ -116,6 +116,10 @@ module Icalia
       def store_oauth_flow_data(data)
         oauth_flows << data
       end
+
+      def url
+        "http://localhost:#{server_port}"
+      end
     
       # Taken from FakeStripe.stub_stripe at fake_stripe gem: 
       def prepare
@@ -127,11 +131,9 @@ module Icalia
         # the Sinatra app instead of just stubbing the app with WebMock...
         boot_once
 
-        oauth_host = "http://localhost:#{server_port}"
-
         OmniAuth::Strategies::Icalia.instances.each do |strategy|
           strategy.options.client_options.tap do |options|
-            options.site = oauth_host
+            options.site = url
             options.token_url = "#{oauth_host}/oauth/token"
             options.authorize_url = "#{oauth_host}/oauth/authorize"
           end
