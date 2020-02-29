@@ -19,9 +19,9 @@ module OmniAuth
       end
 
       def initialize(*args)
-        instance = super(*args)
-        @@instances << instance
-        instance
+        ret = super
+        @@instances << self
+        ret
       end
 
       def request_phase

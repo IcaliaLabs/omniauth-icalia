@@ -120,34 +120,34 @@ module Icalia
       # Taken from FakeStripe.stub_stripe at fake_stripe gem: 
       def prepare
         reset
-    
+
+        yield self if block_given?
+
         # Since the OAuth flow is performed by the browser, we'll need to boot
         # the Sinatra app instead of just stubbing the app with WebMock...
         boot_once
-    
+
         oauth_host = "http://localhost:#{server_port}"
 
-        OmniAuth::Strategies::Icalia.instances.each do |options|
-          options.client_options.tap do |client_options|
-            client_options.site = oauth_host
-            client_options.token_url = "#{oauth_host}/oauth/token"
-            client_options.authorize_url = "#{oauth_host}/oauth/authorize"
+        OmniAuth::Strategies::Icalia.instances.each do |strategy|
+          strategy.options.client_options.tap do |options|
+            options.site = oauth_host
+            options.token_url = "#{oauth_host}/oauth/token"
+            options.authorize_url = "#{oauth_host}/oauth/authorize"
           end
         end
-    
-        yield self if block_given?
       end
 
       def teardown
         default_client_options = OmniAuth::Strategies::Icalia
           .default_options
           .client_options
-
-        OmniAuth::Strategies::Icalia.instances.each do |options|
-          options.client_options.tap do |client_options|
-            client_options.site = default_client_options.site
-            client_options.token_url = default_client_options.token_url
-            client_options.authorize_url = default_client_options.authorize_url
+  
+        OmniAuth::Strategies::Icalia.instances.each do |strategy|
+          strategy.options.client_options.tap do |options|
+            options.site = default_client_options.site
+            options.token_url = default_client_options.token_url
+            options.authorize_url = default_client_options.authorize_url
           end
         end
       end
