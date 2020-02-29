@@ -151,8 +151,8 @@ module Icalia
         OmniAuth::Strategies::Icalia.instances.each do |strategy|
           strategy.options.client_options.tap do |options|
             options.site = url
-            options.token_url = "#{oauth_host}/oauth/token"
-            options.authorize_url = "#{oauth_host}/oauth/authorize"
+            options.token_url = "#{url}/oauth/token"
+            options.authorize_url = "#{url}/oauth/authorize"
           end
         end
       end
