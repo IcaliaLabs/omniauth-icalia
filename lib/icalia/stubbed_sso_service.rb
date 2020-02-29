@@ -121,8 +121,6 @@ module Icalia
       def prepare
         reset
     
-        yield self if block_given?
-    
         # Since the OAuth flow is performed by the browser, we'll need to boot
         # the Sinatra app instead of just stubbing the app with WebMock...
         boot_once
@@ -135,6 +133,8 @@ module Icalia
           client_options.token_url = "#{oauth_host}/oauth/token"
           client_options.authorize_url = "#{oauth_host}/oauth/authorize"
         end
+    
+        yield self if block_given?
       end
 
       def teardown
