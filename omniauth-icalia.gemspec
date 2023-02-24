@@ -18,7 +18,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
   spec.version       = Omniauth::Icalia::VERSION
 
-  spec.add_dependency 'omniauth', '~> 1.5'
+  spec.add_dependency 'omniauth', '>= 1.5', '< 3.0'
   spec.add_dependency 'omniauth-oauth2', '>= 1.4.0', '< 2.0'
   spec.add_dependency 'icalia-sdk-event-core', '~> 0.3', '>= 0.3.5'
 
